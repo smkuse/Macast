@@ -1002,11 +1002,11 @@ class DLNAHandler(Handler):
     def build_description(self):
         self.description = load_xml(XMLPath.DESCRIPTION.value).format(
             friendly_name=Setting.get_friendly_name(),
-            manufacturer="xfangfang",
-            manufacturer_url="https://github.com/xfangfang",
+            manufacturer="xfangfang / smkuse",
+            manufacturer_url="https://github.com/smkuse",
             model_description="AVTransport Media Renderer",
             model_name="Macast",
-            model_url="https://xfangfang.github.io/Macast",
+            model_url="https://github.com/smkuse/Macast",
             model_number=Setting.get_version(),
             uuid=Setting.get_usn(),
             serial_num=1024,

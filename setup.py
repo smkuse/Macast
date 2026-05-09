@@ -36,7 +36,7 @@ setup(
     author_email="xfangfang@126.com",
     description="a DLNA Media Renderer",
     license="GPL3",
-    url="https://github.com/xfangfang/Macast",
+    url="https://github.com/smkuse/Macast",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     classifiers=["Topic :: Multimedia :: Sound/Audio",
