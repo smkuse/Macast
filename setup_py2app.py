@@ -20,11 +20,14 @@ OPTIONS = {
     'plist': {
         'LSUIElement': True,
         'NSHighResolutionCapable': True,
-        'LSMinimumSystemVersion': '10.12.0',
+        # 支持 Apple Silicon (arm64)，最低 macOS 12 Monterey
+        'LSMinimumSystemVersion': '12.0',
         'CFBundleIdentifier': 'cn.xfangfang.Macast',
         'NSHumanReadableCopyright': copyright,
         'CFBundleShortVersionString': str(VERSION),
         'CFBundleVersion': str(VERSION),
+        # 支持 Apple Silicon 原生运行
+        'NSRequiresAquaSystemAppearance': False,
     },
     'excludes': ['PIL', 'tkinter'],
     'packages': ['rumps', 'macast', 'macast_renderer'],

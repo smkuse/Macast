@@ -13,7 +13,7 @@ import locale
 import cherrypy
 import subprocess
 from enum import Enum
-import netifaces as ni
+import netifaces_plus as ni
 
 if sys.platform == 'darwin':
     from AppKit import NSBundle

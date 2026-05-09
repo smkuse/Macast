@@ -1,7 +1,9 @@
+# macOS 依赖 (Apple Silicon arm64)
 appdirs
 cherrypy
 lxml
 requests
 rumps
 pyperclip
-netifaces
+# netifaces-plus 是 netifaces 的维护分支，支持 Python 3.12 和 Apple Silicon
+netifaces-plus
