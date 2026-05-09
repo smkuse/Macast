@@ -1,8 +1,8 @@
-appdirs
-cherrypy
-lxml
-pillow
-requests
-netifaces-plus
+appdirs>=1.4.4
+cherrypy>=18.10.0
+lxml>=6.1.0
+pillow>=12.2.0
+requests>=2.33.1
+netifaces-plus>=0.11.0
 git+https://github.com/xfangfang/pystray.git
 git+https://github.com/xfangfang/pyperclip.git

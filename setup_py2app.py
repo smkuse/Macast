@@ -20,13 +20,11 @@ OPTIONS = {
     'plist': {
         'LSUIElement': True,
         'NSHighResolutionCapable': True,
-        # 支持 Apple Silicon (arm64)，最低 macOS 15 Tahoe
         'LSMinimumSystemVersion': '15.0',
         'CFBundleIdentifier': 'cn.xfangfang.Macast',
         'NSHumanReadableCopyright': copyright,
         'CFBundleShortVersionString': str(VERSION),
         'CFBundleVersion': str(VERSION),
-        # 支持 Apple Silicon 原生运行
         'NSRequiresAquaSystemAppearance': False,
     },
     'excludes': ['PIL', 'tkinter'],

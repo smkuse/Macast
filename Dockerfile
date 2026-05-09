@@ -1,16 +1,13 @@
-FROM python:3.7-slim-buster
+FROM python:3.12-slim-bookworm
 
 ENV PYPI_URL=https://pypi.tuna.tsinghua.edu.cn
 ENV PYPI_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 
 RUN \
     set -x &&\
-    # install gi to python3.7/site-packages
     mkdir -p /usr/lib/python3 &&\
-    ln -s /usr/local/lib/python3.7/site-packages /usr/lib/python3/dist-packages &&\
-    # update system
+    ln -s /usr/local/lib/python3.12/site-packages /usr/lib/python3/dist-packages &&\
     apt-get update &&\
-    # install requirements
     apt-get install -y --no-install-recommends \
         binutils \
         python3-gi \

@@ -51,8 +51,7 @@ jobs:
           artifacts: ${{ env.DIST_DMG }}/${{ env.DIST_DMG }}
 
   build-darwin:
-    # 使用 macOS 14+ (Apple Silicon M1) runner
-    runs-on: macos-latest
+    runs-on: macos-26-arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -69,7 +68,6 @@ jobs:
         run: |
           pip3 install -r requirements/darwin.txt
           pip3 install py2app
-          # 下载 Apple Silicon 版本的 mpv
           wget https://laboratory.stolendata.net/~djinn/mpv_osx/mpv-latest.tar.gz
           mkdir -p bin && tar --strip-components 2 -C bin -xzvf mpv-latest.tar.gz mpv.app/Contents/MacOS
 
@@ -77,7 +75,6 @@ jobs:
         id: compile
         run: |
           for file in i18n/*; do msgfmt -o $file/LC_MESSAGES/macast.mo $file/LC_MESSAGES/macast.po;echo $file;done
-          # 构建 arm64 (Apple Silicon) 版本
           python3 setup_py2app.py py2app --arch=arm64
           cp -R bin dist/Macast.app/Contents/Resources/
           export VERSION=`cat macast/.version`

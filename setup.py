@@ -14,18 +14,18 @@ LONG_DESCRIPTION = ""
 with open('README.md', 'r', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 OPTIONS = {}
-INSTALL = ["requests", "appdirs", "cherrypy", "lxml", "netifaces-plus"]
+INSTALL = ["requests>=2.33.1", "appdirs>=1.4.4", "cherrypy>=18.10.0", "lxml>=6.1.0", "netifaces-plus>=0.11.0"]
 PACKAGES = find_packages()
 
 if sys.platform == 'darwin':
-    INSTALL += ["rumps",
-                "pyperclip"]
+    INSTALL += ["rumps>=0.4.0",
+                "pyperclip>=1.11.0"]
 elif sys.platform == 'win32':
-    INSTALL += ["pillow",
-                "pyperclip",
-                "pystray"]
+    INSTALL += ["pillow>=12.2.0",
+                "pyperclip>=1.11.0",
+                "pystray>=0.19.5"]
 else:
-    INSTALL += ["pillow",
+    INSTALL += ["pillow>=12.2.0",
                 "pystray @ git+https://github.com/xfangfang/pystray.git",
                 "pyperclip @ git+https://github.com/xfangfang/pyperclip.git"]
 
@@ -45,11 +45,11 @@ setup(
                  'Programming Language :: Python :: 3.10',
                  'Programming Language :: Python :: 3.11',
                  'Programming Language :: Python :: 3.12',
+                 'Programming Language :: Python :: 3.13',
+                 'Programming Language :: Python :: 3.14',
                  'Operating System :: MacOS :: MacOS X',
-                 'Operating System :: Microsoft :: Windows :: Windows NT/2000',
-                 'Operating System :: POSIX',
                  ],
-    platforms=["MacOS X", "Windows", "POSIX"],
+    platforms=["MacOS X"],
     keywords=["mpv", "dlna", "renderer"],
     options=OPTIONS,
     install_requires=INSTALL,
