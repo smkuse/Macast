@@ -293,8 +293,15 @@ class Setting:
         """
         if Setting.base_path is not None:
             return os.path.join(Setting.base_path, path)
-        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-            Setting.base_path = sys._MEIPASS
+        if getattr(sys, 'frozen', False):
+            if hasattr(sys, '_MEIPASS'):
+                # PyInstaller
+                Setting.base_path = sys._MEIPASS
+            elif sys.platform == 'darwin':
+                # py2app
+                Setting.base_path = os.path.dirname(os.path.dirname(os.path.dirname(sys.executable)))
+            else:
+                Setting.base_path = os.path.dirname(sys.executable)
         else:
             Setting.base_path = os.path.join(os.path.dirname(__file__), '.')
         return os.path.join(Setting.base_path, path)

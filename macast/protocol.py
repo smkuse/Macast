@@ -571,10 +571,15 @@ class DLNAProtocol(Protocol):
         :param rawbody: soap request from dlna client
         :return:
         """
+        logger.info("RAW BODY: {}".format(rawbody))
         root = etree.fromstring(rawbody)[0][0]
+        logger.info("ROOT TAG: {}".format(root.tag))
         param = {}
         for node in root:
-            param[node.tag] = node.text
+            logger.info("NODE TAG: {}".format(node.tag))
+            tag = node.tag.split('}')[1] if '}' in node.tag else node.tag
+            param[tag] = node.text
+            logger.info("PARAM: {} = {}".format(tag, node.text))
         action = root.tag.split('}')[1]
         service = root.tag.split(":")[3]
         method = "{}_{}".format(service, action)
@@ -681,22 +686,24 @@ class DLNAProtocol(Protocol):
 
     def AVTransport_SetAVTransportURI(self, data):
         uri = data['CurrentURI'].value
-        logger.info(uri)
         self.set_state_url(uri)
         self.renderer.set_media_url(uri)
         title = Setting.get_friendly_name()
         try:
-            meta = etree.fromstring(data['CurrentURIMetaData'].value.encode())
-            title_xml = meta.find('.//{{{}}}title'.format(meta.nsmap['dc']))
-            if title_xml is not None and title_xml.text is not None:
-                title = title_xml.text
-            metadata = etree.tostring(meta, encoding="UTF-8", xml_declaration=False)
+            meta_data = data['CurrentURIMetaData'].value
+            if meta_data is not None:
+                meta = etree.fromstring(meta_data.encode())
+                title_xml = meta.find('.//{{{}}}title'.format(meta.nsmap['dc']))
+                if title_xml is not None and title_xml.text is not None:
+                    title = title_xml.text
+                metadata = etree.tostring(meta, encoding="UTF-8", xml_declaration=False)
+                self.set_state('CurrentTrackMetaData', metadata.decode())
+            else:
+                self.set_state('CurrentTrackMetaData', '')
         except Exception as e:
             logger.error(str(e))
             logger.error(data['CurrentURIMetaData'].value)
-            self.set_state('CurrentTrackMetaData', data['CurrentURIMetaData'].value)
-        else:
-            self.set_state('CurrentTrackMetaData', metadata.decode())
+            self.set_state('CurrentTrackMetaData', data['CurrentURIMetaData'].value or '')
         self.renderer.set_media_title(title)
         self.renderer.set_media_resume()
         self.set_state('CurrentTrackTitle', title)
@@ -1015,11 +1022,13 @@ class DLNAHandler(Handler):
     def POST(self, service=None, param=None, *args, **kwargs):
         length = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(length))
-        logger.debug('RAW: {}'.format(rawbody))
-        if param == 'action':
+        logger.info('RAW: {}'.format(rawbody))
+        logger.info('SERVICE: {}, PARAM: {}'.format(service, param))
+        # Check if the URL ends with /action
+        if cherrypy.request.path_info.endswith('/action'):
             res = self.protocol.call(rawbody)
             cherrypy.response.headers['EXT'] = ''
-            logger.debug('RES: {}'.format(res))
+            logger.info('RES: {}'.format(res))
             return res
         return super(DLNAHandler, self).POST(service, param, *args, **kwargs)
 

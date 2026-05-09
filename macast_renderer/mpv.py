@@ -101,13 +101,7 @@ class MPVRenderer(Renderer):
     def set_media_url(self, url, start="0"):
         """ data : string
         """
-        options = {'start': start}
-        player_size = Setting.get(SettingProperty.PlayerSize,
-                                  default=SettingProperty.PlayerSize_Normal.value)
-        if player_size == SettingProperty.PlayerSize_FullScreen.value:
-            options['fullscreen'] = 'yes'
-        self.send_command(['loadfile', url, 'replace',
-                           ','.join([f'{i}={options[i]}' for i in options])])
+        self.send_command(['loadfile', url, 'replace'])
 
     def set_media_title(self, data):
         """ data : string
