@@ -20,8 +20,8 @@ OPTIONS = {
     'plist': {
         'LSUIElement': True,
         'NSHighResolutionCapable': True,
-        # 支持 Apple Silicon (arm64)，最低 macOS 12 Monterey
-        'LSMinimumSystemVersion': '12.0',
+        # 支持 Apple Silicon (arm64)，最低 macOS 15 Tahoe
+        'LSMinimumSystemVersion': '15.0',
         'CFBundleIdentifier': 'cn.xfangfang.Macast',
         'NSHumanReadableCopyright': copyright,
         'CFBundleShortVersionString': str(VERSION),
