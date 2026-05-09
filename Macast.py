@@ -13,7 +13,11 @@ logger.setLevel(logging.DEBUG)
 
 def get_base_path(path="."):
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        # PyInstaller
         base_path = sys._MEIPASS
+    elif sys.platform == 'darwin' and getattr(sys, 'frozen', False):
+        # py2app on macOS
+        base_path = os.path.join(os.path.dirname(sys.executable), '..', 'Resources')
     else:
         base_path = os.getcwd()
     return os.path.join(base_path, path)
