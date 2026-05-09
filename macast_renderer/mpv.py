@@ -404,10 +404,10 @@ class MPVRenderer(Renderer):
                 self.proc = subprocess.Popen(
                     params,
                     stdout=subprocess.DEVNULL,
-                    stderr=subprocess.PIPE,
+                    stderr=subprocess.DEVNULL,
                     stdin=subprocess.PIPE,
                     env=Setting.get_system_env())
-                self.proc.communicate()
+                self.proc.wait()
             except Exception as e:
                 logger.error(e)
             logger.info("mpv stopped")
