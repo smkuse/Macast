@@ -49,6 +49,12 @@ A menu bar application using mpv as **DLNA Media Renderer**. You can push videos
 3. Open the DMG file
 4. Drag `Macast.app` to Applications folder
 
+**Troubleshooting:**
+If you see "Macast can't be opened because Apple cannot check it for malicious software" or "The app is damaged and can't be opened", open Terminal and run:
+```bash
+xattr -cr /Applications/Macast.app
+```
+
 ### Option 2: Install via pip
 
 ```shell
