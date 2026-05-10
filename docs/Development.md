@@ -1,133 +1,160 @@
-# Macast Development
+# Macast 开发指南
 
-On windows and Linux, we use **pystray**  to add menubar icon support, and use **pyinstaller** to package application.
-We use **rumps** and **py2app** on MacOS which have better performance and smaller package size.
+> **注意：本项目仅支持 macOS (Apple Silicon)。**
 
+## 环境要求
 
-## Development under MacOS
+- **macOS**: 15.0 Sequoia 或更高版本（推荐 macOS 26 Tahoe）
+- **芯片**: Apple Silicon (M1/M2/M3/M4) - arm64
+- **Python**: 3.12+（推荐 3.13 或 3.14）
+- **Xcode Command Line Tools**: 已安装
 
-### 1. download mpv
+---
+
+## 开发环境配置
+
+### 1. 克隆代码
+
+```shell
+git clone https://github.com/smkuse/Macast.git
+cd Macast
+```
+
+### 2. 下载 mpv
 
 ```shell
 wget https://laboratory.stolendata.net/~djinn/mpv_osx/mpv-latest.tar.gz
 mkdir -p bin && tar --strip-components 2 -C bin -xzvf mpv-latest.tar.gz mpv.app/Contents/MacOS
 ```
 
-### 2. debug
+### 3. 安装依赖
 
 ```shell
+# 创建虚拟环境（推荐）
+python3 -m venv venv
+source venv/bin/activate
+
+# 安装依赖
 pip install -r requirements/darwin.txt
+```
+
+### 4. 运行调试
+
+```shell
 python Macast.py
 ```
 
-### 3. package
+---
+
+## 打包发布
+
+### 使用 py2app 打包
 
 ```shell
+# 安装 py2app
 pip install py2app
-pip install setuptools==44.0.0 # try this if you cannot run Macast.app
-python setup.py py2app
+
+# 构建 arm64 版本
+python setup_py2app.py py2app --arch=arm64
+
+# 复制 mpv 到 App Bundle
 cp -R bin dist/Macast.app/Contents/Resources/
+
+# 验证
 open dist
 ```
 
-
-## Development under Windows
-
-### 1. download mpv
-
-```powershell
-$client = new-object System.Net.WebClient
-$client.DownloadFile('https://nchc.dl.sourceforge.net/project/mpv-player-windows/stable/mpv-0.33.0-x86_64.7z','mpv.7z')
-7z x -obin mpv.7z *.exe
-```
-
-### 2. debug
-
-```powershell
-pip install -r requirements/common.txt
-python Macast.py
-```
-
-### 3. package
-
-```powershell
-pip install pyinstaller
-pyinstaller --noconfirm -F -w --additional-hooks-dir=. --add-data=".version;." --add-data="macast/xml/*;macast/xml"  --add-data="i18n/zh_CN/LC_MESSAGES/*.mo;i18n/zh_CN/LC_MESSAGES" --add-data="assets/*;assets" --add-binary="bin/mpv.exe;bin" --icon=assets/icon.ico Macast.py
-```
-
-
-## Development under Linux (example: Ubuntu)
-
-### 1. install mpv
+### 创建 DMG 安装包
 
 ```shell
-sudo apt install mpv
+# 安装 create-dmg
+brew install create-dmg
+
+# 创建 DMG
+VERSION=$(cat macast/.version)
+create-dmg \
+  --window-pos 200 120 \
+  --window-size 800 400 \
+  --icon-size 100 \
+  --icon "Macast.app" 200 190 \
+  --hide-extension "Macast.app" \
+  --app-drop-link 600 185 \
+  --volname "Macast-v${VERSION}-arm64 Installer" \
+  "Macast-MacOS-arm64-v${VERSION}.dmg" \
+  "dist/"
 ```
 
-### 2. debug
+---
+
+## 项目结构
+
+```
+Macast/
+├── macast/                 # 核心模块
+│   ├── gui.py             # GUI 界面 (rumps)
+│   ├── macast.py          # 主应用逻辑
+│   ├── server.py          # HTTP 服务器
+│   ├── ssdp.py            # SSDP 发现服务
+│   ├── protocol.py        # DLNA 协议实现
+│   ├── renderer.py        # 渲染器基类
+│   ├── plugin.py          # 插件系统
+│   ├── utils.py           # 工具函数
+│   └── xml/               # DLNA XML 描述文件
+├── macast_renderer/        # 渲染器实现
+│   └── mpv.py             # MPV 播放器渲染器
+├── i18n/                   # 国际化翻译文件
+├── requirements/           # 依赖文件
+│   └── darwin.txt         # macOS 依赖
+├── Macast.py              # 应用入口
+├── setup.py               # pip 安装配置
+└── setup_py2app.py        # py2app 打包配置
+```
+
+---
+
+## 常见问题
+
+### Q1: 提示 "No module named 'rumps'"
 
 ```shell
-pip install -r requirements/common.txt
-python Macast.py
-# if there is something wrong, try this:
-export PYSTRAY_BACKEND=gtk && python3 Macast.py
+pip install rumps pyperclip
 ```
 
-Tips: Make sure you can use **gi**:
-
-```
-$ python3
-Python 3.7.10 (default, Jun  3 2021, 17:51:26)
-Type "help", "copyright", "credits" or "license" for more information.
->>> import gi
->>>
-```
-
-if there is something wrong, try: **sudo apt-get install python3-gi**
-
-if you use conda, check this https://stackoverflow.com/a/40303128
-
-For details of GUI support, please refer to: https://pystray.readthedocs.io/en/latest/usage.html#selecting-a-backend
-
-
-### 3. package
+### Q2: py2app 构建失败
 
 ```shell
-# build binary
-pip install pyinstaller
-pyinstaller --noconfirm -F -w --additional-hooks-dir=. --add-data=".version:." --add-data="macast/xml/*:macast/xml"  --add-data="i18n/zh_CN/LC_MESSAGES/*.mo:i18n/zh_CN/LC_MESSAGES" --add-data="assets/*:assets" Macast.py
-# build deb
-export VERSION=`cat .version`
-mkdir -p dist/DEBIAN
-mkdir -p dist/usr/bin
-mkdir -p dist/usr/share/applications
-mkdir -p dist/usr/share/icons
-echo -e "Package: Macast\nVersion: ${VERSION}\nArchitecture: amd64\nMaintainer: xfangfang\nDescription: DLNA Media Renderer\nDepends: mpv" > dist/DEBIAN/control
-echo -e "[Desktop Entry]\nName=Macast\nComment=DLNA Media Renderer\nExec=/usr/bin/macast\nIcon=/usr/share/icons/Macast.png\nTerminal=false\nType=Application\nCategories=Video" > dist/usr/share/applications/macast.desktop
-mv dist/Macast dist/usr/bin/macast
-cp assets/icon.png dist/usr/share/icons/Macast.png
-dpkg -b dist Macast-v${VERSION}.deb
+# 清理缓存后重试
+rm -rf build dist
+python setup_py2app.py py2app --arch=arm64
 ```
 
+### Q3: mpv 无法运行
 
-### 4. build with docker (Thanks to **cdrx/docker-pyinstaller**)
-
-Not sure whether it can run normally, used to add support for older versions of Linux.
-
+确保下载的是 Apple Silicon 版本:
 
 ```shell
-cp requirements/common.txt requirements.txt
-docker run \
-  --env PYPI_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple" \
-  --env PYPI_URL="https://pypi.tuna.tsinghua.edu.cn" \
-  --rm -v "$(pwd):/src/" xfangfang/pyinstaller-linux:python3 \
-    'pip install --upgrade pip &&\
-    pip install --no-use-pep517 --upgrade pyinstaller &&\
-    pyinstaller --noconfirm -F -w \
-      --additional-hooks-dir=. \
-      --add-data=".version:." \
-      --add-data="macast/xml/*:macast/xml" \
-      --add-data="i18n/zh_CN/LC_MESSAGES/*.mo:i18n/zh_CN/LC_MESSAGES" \
-      --add-data="assets/*:assets" \
-    Macast.py'
+file bin/mpv
+# 应包含 arm64，而不是仅 x86_64
 ```
+
+### Q4: App 打开后闪退
+
+检查日志:
+
+```shell
+# 查看系统日志
+log stream --predicate 'process == "Macast"' --level debug
+
+# 或从终端运行查看错误
+./dist/Macast.app/Contents/MacOS/Macast
+```
+
+---
+
+## 详细构建指南
+
+完整的构建步骤请参考 [macOS 构建指南](../MACOS_BUILD_GUIDE.md)。
+
+---
+
+*最后更新: 2026-05-10*

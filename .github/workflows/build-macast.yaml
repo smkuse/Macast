@@ -99,14 +99,21 @@ jobs:
           shasum -a 256 "${{ steps.artifact.outputs.dmg_name }}" \
             > "${{ steps.artifact.outputs.dmg_name }}.sha256"
 
-      - name: Upload artifact
+      - name: Upload DMG artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.artifact.outputs.dmg_name }}
-          path: |
-            ${{ steps.artifact.outputs.dmg_name }}
-            ${{ steps.artifact.outputs.dmg_name }}.sha256
+          name: Macast-DMG
+          path: ${{ steps.artifact.outputs.dmg_name }}
           retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload checksum artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Macast-Checksum
+          path: ${{ steps.artifact.outputs.dmg_name }}.sha256
+          retention-days: 30
+          if-no-files-found: error
 
       - name: SSH debug (manual only)
         if: failure() && github.event_name == 'workflow_dispatch' && inputs.debug_ssh
@@ -128,11 +135,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download artifacts
+      - name: Download DMG artifact
         uses: actions/download-artifact@v8
         with:
-          merge-multiple: true
-          path: dist/
+          name: Macast-DMG
+          path: ./
+
+      - name: Download checksum artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: Macast-Checksum
+          path: ./
+
+      - name: List files
+        run: ls -la
 
       - name: Generate release notes
         id: changelog
@@ -158,7 +174,7 @@ jobs:
             echo ""
             echo "## 🔐 校验和 (SHA256)"
             echo '```'
-            cat dist/*.sha256 2>/dev/null || true
+            cat *.sha256 2>/dev/null || true
             echo '```'
           } >> "$RELEASE_MD"
 
@@ -178,5 +194,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
           omitBodyDuringUpdate: false
-          artifacts: dist/*.dmg
+          artifacts: "*.dmg,*.sha256"
           artifactErrorsFailBuild: true

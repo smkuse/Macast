@@ -3,94 +3,99 @@
 # Macast
 
 [![build](https://img.shields.io/github/actions/workflow/status/smkuse/Macast/build-macast.yaml?branch=main&label=build)](https://github.com/smkuse/Macast/actions/workflows/build-macast.yaml)
-[![mac](https://img.shields.io/badge/macOS-15.0%2B%20(Tahoe)-lightgrey?logo=Apple)](https://github.com/smkuse/Macast/releases/latest)
-[![pypi](https://img.shields.io/pypi/v/macast)](https://pypi.org/project/macast/)
+[![release](https://img.shields.io/github/v/release/smkuse/Macast?label=latest%20release)](https://github.com/smkuse/Macast/releases/latest)
+[![mac](https://img.shields.io/badge/platform-macOS%2015.0%2B%20(Tahoe)-lightgrey?logo=Apple)](https://github.com/smkuse/Macast/releases/latest)
+[![license](https://img.shields.io/github/license/smkuse/Macast)](LICENSE)
 
 > **⚠️ Note: This is a fork of [xfangfang/Macast](https://github.com/xfangfang/Macast).**
 > 
 > The original project is no longer maintained and doesn't work on latest macOS. This fork includes:
-> - Updated Python dependencies to latest versions
 > - Native support for **macOS 26 Tahoe (Apple Silicon M-series)**
+> - Updated Python dependencies to latest versions
 > - Replaced deprecated `netifaces` with `netifaces-plus`
 > - Fixed py2app packaging issues
 > - Updated CI/CD with GitHub Actions for automatic DMG builds
-> - Minimum system requirement: macOS 15.0+
-
-
+> - **Platform support: macOS only (Apple Silicon)**
 
 [中文说明](README_ZH.md)
 
 A menu bar application using mpv as **DLNA Media Renderer**. You can push videos, pictures or musics from your mobile phone to your computer.
 
+---
 
-## Installation
+## 📥 Download
 
-- ### MacOS (Apple Silicon)
+### macOS (Apple Silicon)
 
-  Download link: [Macast release latest](https://github.com/smkuse/Macast/releases/latest)
+**Download from [Releases](https://github.com/smkuse/Macast/releases/latest)**
 
-- ### Package manager
+| File | Description |
+|------|-------------|
+| `Macast-MacOS-arm64-*.dmg` | DMG installer for Apple Silicon (M1/M2/M3/M4) |
+| `*.sha256` | SHA256 checksum file |
 
-  ```shell
-  pip install macast
-  macast-gui # or macast-cli
-  ```
+**System Requirements:**
+- macOS 15.0 Sequoia or later (macOS 26 Tahoe recommended)
+- Apple Silicon Mac (M1/M2/M3/M4)
 
-  Please see our wiki for more information(like **aur** support): [#package-manager](https://github.com/xfangfang/Macast/wiki/Installation#package-manager)  
-  Linux users may have problems installing using pip. Two additional libraries that I have modified need to be installed:
+---
 
-  ```shell
-  pip install git+https://github.com/xfangfang/pystray.git
-  pip install git+https://github.com/xfangfang/pyperclip.git
-  ```
+## 📦 Installation
 
-  **See [this](https://github.com/xfangfang/Macast/wiki/Installation#linux) for Linux compatibility**
+### Option 1: Download DMG (Recommended)
 
-- ### Build from source
+1. Go to [Releases](https://github.com/smkuse/Macast/releases/latest)
+2. Download `Macast-MacOS-arm64-*.dmg`
+3. Open the DMG file
+4. Drag `Macast.app` to Applications folder
 
-  Please refer to: [Macast Development](docs/Development.md)
+### Option 2: Install via pip
 
+```shell
+pip install macast
+macast-gui  # or macast-cli
+```
 
-## Usage
+### Option 3: Build from source
 
-- **For ordinary users**  
-After opening this app, a small icon will appear in the **menubar** / **taskbar** / **desktop panel**, then you can push your media files from a local DLNA client to your computer.
+Please refer to: [macOS Build Guide](MACOS_BUILD_GUIDE.md)
 
-- **For advanced users**  
-  1. By loading the [Macast-plugins](https://github.com/xfangfang/Macast-plugins), Macast can support third-party players like IINA and PotPlayer.  
-  For more information, see: [#how-to-use-third-party-player-plug-in](https://github.com/xfangfang/Macast/wiki/FAQ#how-to-use-third-party-player-plug-in)
-  2. You can modify the shortcut keys or configuration of the default mpv player by yourself, see: [#how-to-set-personal-configurations-to-mpv](https://github.com/xfangfang/Macast/wiki/FAQ#how-to-set-personal-configurations-to-mpv)
+---
 
-- **For developer**  
-You can use a few lines of code to add support for other players like IINA and PotPlayer or even add additional features, like downloading media files while playing videos.  
-Tutorials and examples are shown in: [Macast/wiki/Custom-Renderer](https://github.com/xfangfang/Macast/wiki/Custom-Renderer).  
-Fell free to submit a pull request to [Macast-plugins](https://github.com/xfangfang/Macast-plugins).  
+## 🚀 Usage
 
+After opening this app, a small icon will appear in the **menu bar**, then you can push your media files from a DLNA client (such as your phone) to your Mac.
 
-## FAQ
-If you have any questions about this application, please check: [Macast/wiki/FAQ](https://github.com/xfangfang/Macast/wiki/FAQ).  
-If this does not solve your problem, please open a new issue to notify us, we are willing to help you solve the problem.
+### Supported DLNA Clients
+- iOS: nPlayer, Infuse, etc.
+- Android: BubbleUPnP, VLC, etc.
+- Windows: Windows Media Player
+- Other DLNA/UPnP compatible apps
 
-## Screenshots
+---
 
-You can copy the video link after the video is casted：  
-<img align="center" width="400" src="https://github.com/xfangfang/xfangfang.github.io/raw/master/assets/img/macast/copy_uri.png" alt="copy_uri" height="auto"/>
+## ⚙️ Features
 
-Or select a third-party player plug-in  
-<img align="center" width="400" src="https://github.com/xfangfang/xfangfang.github.io/raw/master/assets/img/macast/select_renderer.png" alt="select_renderer" height="auto"/>
+- **DLNA Media Renderer**: Receive media from any DLNA client
+- **MPV Integration**: High-quality video playback
+- **Menu Bar App**: Lightweight, runs in background
+- **Multi-language Support**: English, Chinese, Finnish, Italian
 
-## Relevant links
+---
 
-[UPnP™ Device Architecture 1.1](http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf)
+## 🔧 Development
 
-[UPnP™ Resources](http://upnp.org/resources/upnpresources.zip)
+See [Development Guide](docs/Development.md) for build instructions.
 
-[UPnP™ ContentDirectory:1 service](http://upnp.org/specs/av/UPnP-av-ContentDirectory-v1-Service.pdf)
+---
 
-[UPnP™ MediaRenderer:1 device](http://upnp.org/specs/av/UPnP-av-MediaRenderer-v1-Device.pdf)
+## 📄 License
 
-[UPnP™ AVTransport:1 service](http://upnp.org/specs/av/UPnP-av-AVTransport-v1-Service.pdf)
+This project is licensed under GPL-3.0 - see the [LICENSE](LICENSE) file for details.
 
-[UPnP™ RenderingControl:1 service](http://upnp.org/specs/av/UPnP-av-RenderingControl-v1-Service.pdf)
+---
 
-[python-upnp-ssdp-example](https://github.com/ZeWaren/python-upnp-ssdp-example)
+## 🙏 Credits
+
+- Original project by [xfangfang](https://github.com/xfangfang)
+- DLNA implementation based on [coherence](https://github.com/coherence-project/coherence)
