@@ -26,6 +26,12 @@ OPTIONS = {
         'CFBundleVersion': str(VERSION),
         'NSSupportsAutomaticTermination': False,
         'NSAppleEventsUsageDescription': 'Macast needs Apple Events to communicate with system components.',
+        # macOS Tahoe 兼容性配置
+        'NSMicrophoneUsageDescription': 'Macast does not use microphone, but this permission is required by some DLNA clients.',
+        'NSCameraUsageDescription': 'Macast does not use camera, but this permission is required by some DLNA clients.',
+        'NSAppleScriptEnabled': True,
+        # 支持 Apple Silicon 原生运行
+        'LSArchitecturePriority': ['arm64', 'x86_64'],
     },
     'excludes': ['PIL', 'tkinter'],
     'packages': ['rumps', 'macast', 'macast_renderer'],

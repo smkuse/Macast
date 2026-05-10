@@ -53,7 +53,7 @@ def clear_env():
     log_path = os.path.join(SETTING_DIR, 'macast.log')
     try:
         os.remove(log_path)
-    except:
+    except (IOError, OSError, FileNotFoundError):
         pass
 
 

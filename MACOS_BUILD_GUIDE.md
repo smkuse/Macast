@@ -2,9 +2,9 @@
 
 ## 环境要求
 
-- **macOS**: 12.0 Monterey 或更高版本
-- **芯片**: Apple Silicon (M1/M2/M3) - arm64
-- **Python**: 3.12 (推荐)
+- **macOS**: 15.0 Sequoia 或更高版本（推荐 macOS 26 Tahoe）
+- **芯片**: Apple Silicon (M1/M2/M3/M4) - arm64
+- **Python**: 3.12+（推荐 3.13 或 3.14）
 - **Xcode Command Line Tools**: 已安装
 
 ---
@@ -18,8 +18,8 @@
 
 ### 1.2 安装必要工具
 ```bash
-# 安装 Python 3.12
-brew install python@3.12
+# 安装 Python 3.13 (推荐)
+brew install python@3.13
 
 # 安装 create-dmg (用于生成 DMG 安装包)
 brew install create-dmg
@@ -28,13 +28,13 @@ brew install create-dmg
 brew install gettext
 ```
 
-### 1.3 确保使用 Python 3.12
+### 1.3 确保使用 Python 3.13+
 ```bash
 # 检查 Python 版本
-python3 --version  # 应显示 3.12.x
+python3 --version  # 应显示 3.13.x 或更高
 
-# 如需要，链接 Python 3.12
-export PATH="/opt/homebrew/opt/python@3.12/bin:$PATH"
+# 如需要，链接 Python 3.13
+export PATH="/opt/homebrew/opt/python@3.13/bin:$PATH"
 ```
 
 ---
@@ -261,4 +261,4 @@ log stream --predicate 'process == "Macast"' --level debug
 
 ---
 
-*最后更新: 2025-01-09*
+*最后更新: 2026-05-10*

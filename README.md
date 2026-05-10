@@ -2,16 +2,19 @@
 
 # Macast
 
-[![visitor](https://visitor-badge.glitch.me/badge?page_id=xfangfang.Macast)](https://github.com/xfangfang/Macast/releases/latest)
-![stars](https://img.shields.io/badge/dynamic/json?label=github%20stars&query=stargazers_count&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fxfangfang%2FMacast)
-[![downloads](https://img.shields.io/github/downloads/xfangfang/Macast/total?color=blue)](https://github.com/xfangfang/Macast/releases/latest)
-[![plugins](https://shields-staging.herokuapp.com/github/directory-file-count/xfangfang/Macast-plugins?type=dir&label=plugins)](https://github.com/xfangfang/Macast-plugins)
+[![build](https://img.shields.io/github/actions/workflow/status/smkuse/Macast/build-macast.yaml?branch=main&label=build)](https://github.com/smkuse/Macast/actions/workflows/build-macast.yaml)
+[![mac](https://img.shields.io/badge/macOS-15.0%2B%20(Tahoe)-lightgrey?logo=Apple)](https://github.com/smkuse/Macast/releases/latest)
 [![pypi](https://img.shields.io/pypi/v/macast)](https://pypi.org/project/macast/)
-[![aur](https://img.shields.io/aur/version/macast-git?color=yellowgreen)](https://aur.archlinux.org/packages/macast-git/)
-[![build](https://img.shields.io/github/workflow/status/xfangfang/Macast/Build%20Macast)](https://github.com/xfangfang/Macast/actions/workflows/build-macast.yaml)
-[![mac](https://img.shields.io/badge/MacOS-10.14%20and%20higher-lightgrey?logo=Apple)](https://github.com/xfangfang/Macast/releases/latest)
-[![windows](https://img.shields.io/badge/Windows-7%20and%20higher-lightgrey?logo=Windows)](https://github.com/xfangfang/Macast/releases/latest)
-[![linux](https://img.shields.io/badge/Linux-Xorg-lightgrey?logo=Linux)](https://github.com/xfangfang/Macast/releases/latest)
+
+> **⚠️ Note: This is a fork of [xfangfang/Macast](https://github.com/xfangfang/Macast).**
+> 
+> The original project is no longer maintained and doesn't work on latest macOS. This fork includes:
+> - Updated Python dependencies to latest versions
+> - Native support for **macOS 26 Tahoe (Apple Silicon M-series)**
+> - Replaced deprecated `netifaces` with `netifaces-plus`
+> - Fixed py2app packaging issues
+> - Updated CI/CD with GitHub Actions for automatic DMG builds
+> - Minimum system requirement: macOS 15.0+
 
 
 
@@ -22,9 +25,9 @@ A menu bar application using mpv as **DLNA Media Renderer**. You can push videos
 
 ## Installation
 
-- ### MacOS || Windows || Debian
+- ### MacOS (Apple Silicon)
 
-  Download link:  [Macast release latest](https://github.com/xfangfang/Macast/releases/latest)
+  Download link: [Macast release latest](https://github.com/smkuse/Macast/releases/latest)
 
 - ### Package manager
 

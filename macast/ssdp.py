@@ -129,7 +129,7 @@ class SSDPServer:
         self.sock_list = []
         for ip, mask in self.ip_list:
             try:
-                logger.error('add membership {}'.format(ip))
+                logger.info('add membership {}'.format(ip))
                 mreq = socket.inet_aton(SSDP_ADDR) + socket.inet_aton(ip)
                 self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
                 self.sock_list.append(Sock(ip))
@@ -153,7 +153,7 @@ class SSDPServer:
                 continue
         self.shutdown()
         for ip, mask in self.ip_list:
-            logger.error("drop membership {}".format(ip))
+            logger.info("drop membership {}".format(ip))
             mreq = socket.inet_aton(SSDP_ADDR) + socket.inet_aton(ip)
             try:
                 self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_DROP_MEMBERSHIP, mreq)

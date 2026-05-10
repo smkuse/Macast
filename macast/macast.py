@@ -70,8 +70,8 @@ class MacastPlugin:
         if sys.platform in self.platform:
             return True
 
-        logger.error("{} support platform: {}".format(self.title, self.platform))
-        logger.error("{} is not suit for this system.".format(self.title))
+        logger.warning("{} support platform: {}".format(self.title, self.platform))
+        logger.warning("{} is not suit for this system.".format(self.title))
         return False
 
     def load_from_file(self, path):

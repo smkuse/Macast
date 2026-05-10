@@ -453,18 +453,18 @@ class DLNAProtocol(Protocol):
     def add_subscribe(self, service, url, timeout=1800):
         """Add a DLNA client to subscribe list
         """
-        logger.error("SUBSCRIBE: " + url)
+        logger.info("SUBSCRIBE: " + url)
         for client in self.event_subscribes:
             if self.event_subscribes[client].url == url and \
                     self.event_subscribes[client].service == service:
                 s = self.event_subscribes[client]
                 s.update(timeout)
-                logger.error("SUBSCRIBE UPDATE")
+                logger.info("SUBSCRIBE UPDATE")
                 return {
                     "SID": s.sid,
                     "TIMEOUT": "Second-{}".format(s.timeout)
                 }
-        logger.error("SUBSCRIBE ADD")
+        logger.info("SUBSCRIBE ADD")
         client = ObserveClient(service, url, timeout)
         self.append_device_queue.put(client)
         threading.Thread(target=self.send_init_event,
@@ -916,7 +916,7 @@ class Handler:
                 try:
                     with open(log_path, 'r', encoding='utf-8') as f:
                         data = f.read()
-                except:
+                except (IOError, OSError):
                     pass
                 res = {"logs": data}
             elif query == 'launch-param':
@@ -1042,21 +1042,21 @@ class DLNAHandler(Handler):
             TIMEOUT = TIMEOUT if TIMEOUT is not None else 'Second-1800'
             TIMEOUT = int(TIMEOUT.split('-')[-1])
             if SID:
-                logger.error("RENEW SUBSCRIBE:!!!!!!!" + service)
+                logger.info("RENEW SUBSCRIBE: " + service)
                 res = self.protocol.renew_subscribe(SID, TIMEOUT)
                 if res != 200:
-                    logger.error("RENEW SUBSCRIBE: cannot find such sid.")
+                    logger.warning("RENEW SUBSCRIBE: cannot find such sid.")
                     raise cherrypy.HTTPError(status=res)
                 cherrypy.response.headers['SID'] = SID
                 cherrypy.response.headers['TIMEOUT'] = TIMEOUT
             elif CALLBACK:
-                logger.error("ADD SUBSCRIBE:!!!!!!!" + service)
+                logger.info("ADD SUBSCRIBE: " + service)
                 suburl = re.findall("<(.*?)>", CALLBACK)[0]
                 res = self.protocol.add_subscribe(service, suburl, TIMEOUT)
                 cherrypy.response.headers['SID'] = res['SID']
                 cherrypy.response.headers['TIMEOUT'] = res['TIMEOUT']
             else:
-                logger.error("SUBSCRIBE: cannot find sid and callback.")
+                logger.warning("SUBSCRIBE: cannot find sid and callback.")
                 raise cherrypy.HTTPError(status=412)
         return b''
 
@@ -1066,10 +1066,10 @@ class DLNAHandler(Handler):
         if param == 'event':
             SID = cherrypy.request.headers.get('SID')
             if SID:
-                logger.error("REMOVE SUBSCRIBE:!!!!!!!" + service)
+                logger.info("REMOVE SUBSCRIBE: " + service)
                 res = self.protocol.remove_subscribe(SID)
                 if res != 200:
                     raise cherrypy.HTTPError(status=res)
                 return b''
-        logger.error("UNSUBSCRIBE: error 412.")
+        logger.warning("UNSUBSCRIBE: error 412.")
         raise cherrypy.HTTPError(status=412)

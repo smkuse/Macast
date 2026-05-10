@@ -267,13 +267,13 @@ class MPVRenderer(Renderer):
         Communicating with mpv
         """
         if self.ipc_running:
-            logger.error("mpv ipc is already runing")
+            logger.warning("mpv ipc is already running")
             return
         self.ipc_running = True
         while self.ipc_running and self.running and self.mpv_thread.is_alive():
             try:
                 time.sleep(0.5)
-                logger.error("mpv ipc socket start connect")
+                logger.info("mpv ipc socket start connect")
                 if os.name == 'nt':
                     handler = _winapi.CreateFile(
                         self.mpv_sock,
@@ -290,7 +290,7 @@ class MPVRenderer(Renderer):
                 self.ipc_once_connected = True
                 self.set_observe()
             except Exception as e:
-                logger.error("mpv ipc socket reconnecting: {}".format(str(e)))
+                logger.warning("mpv ipc socket reconnecting: {}".format(str(e)))
                 continue
             res = b''
             msgs = None
@@ -319,7 +319,7 @@ class MPVRenderer(Renderer):
                 finally:
                     res = b''
             self.ipc_sock.close()
-            logger.error("mpv ipc stopped")
+            logger.info("mpv ipc stopped")
 
     def start_mpv(self):
         """Start mpv thread
@@ -379,7 +379,6 @@ class MPVRenderer(Renderer):
             if sys.platform == 'darwin':
                 params += [
                     '--ontop-level=system',
-                    '--on-all-workspaces',
                     '--macos-app-activation-policy=accessory',
                 ]
 
@@ -409,7 +408,7 @@ class MPVRenderer(Renderer):
                 # There should be a problem with the MPV startup parameters
                 time.sleep(1)
                 error_time -= 1
-                logger.error("mpv restarting")
+                logger.warning("mpv restarting")
         if error_time <= 0:
             # some thing wrong with mpv
             cherrypy.engine.publish("app_notify", "Macast", "MPV Can't start")
@@ -543,9 +542,9 @@ class MPVRendererSetting(RendererSetting):
                 if res == 0:
                     gpu_info = json.loads(gpu_info)
                     has_dedicated_gpu = len(gpu_info['SPDisplaysDataType']) > 1
-                    logger.error("GPU list:")
+                    logger.debug("GPU list:")
                     for gpu in gpu_info['SPDisplaysDataType']:
-                        logger.error('GPU:' + gpu['sppci_model'])
+                        logger.debug('GPU:' + gpu['sppci_model'])
             except Exception as e:
                 logger.error("Error get gpu info")
 

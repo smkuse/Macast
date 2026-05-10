@@ -78,7 +78,7 @@ class Setting:
                 try:
                     with open(Setting.setting_path, "r") as f:
                         Setting.setting = json.load(fp=f)
-                    logger.error(Setting.setting)
+                    logger.debug(Setting.setting)
                 except Exception as e:
                     logger.error(e)
         return Setting.setting
